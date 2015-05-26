@@ -453,7 +453,8 @@ namespace MusicStore.Controllers
             if (shortToken != null)
             {
                 var app = new App();
-                var source = new FacebookDataSource(shortToken.Value);
+                var source = new FacebookDataSource();
+                await source.LoadAsync(shortToken.Value);
                 app.Sources.Add(source);
                 user.Apps.Add(app);
                 await UserManager.UpdateAsync(user);

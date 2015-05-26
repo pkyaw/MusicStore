@@ -1,27 +1,8 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNet.Identity.EntityFramework;
+﻿using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Data.Entity;
-using Newtonsoft.Json;
 
 namespace MusicStore.Models
 {
-    public class ApplicationUser : IdentityUser
-    {
-        [NotMapped]
-        public List<App> Apps { get; set; }
-        public string AppsJson
-        {
-            get { return JsonConvert.SerializeObject(Apps); }
-            set { Apps = JsonConvert.DeserializeObject<List<App>>(value); }
-        }
-
-        public ApplicationUser()
-        {
-            Apps = new List<App>();
-        }
-    }
-
     public class MusicStoreContext : IdentityDbContext<ApplicationUser>
     {
         public DbSet<Album> Albums { get; set; }
@@ -39,6 +20,7 @@ namespace MusicStore.Models
             builder.Entity<Genre>().Key(g => g.GenreId);
             builder.Entity<CartItem>().Key(c => c.CartItemId);
             builder.Entity<OrderDetail>().Key(o => o.OrderDetailId);
+            builder.Entity<ApplicationUser>().Ignore(t => t.Apps);
 
             // TODO: Remove UseSequence when explicit values insertion removed. Auto generated values enabled. Default is Identity, using sequence at present to allow explicit value insertion.
             builder.Entity<Artist>().Property(a => a.ArtistId).ForSqlServer(b => b.UseSequence());
